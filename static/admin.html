@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Target Password Setup (Zero-Cheat Isolation)</title>
+    <style>
+        :root {
+            --win-accent: #0067c0;
+            --win-accent-hover: #1877d5;
+            --hive-green: #107c41;
+            --bg-dark: #0f141c;
+            --card-bg: rgba(26, 33, 46, 0.9);
+            --border-color: rgba(255, 255, 255, 0.14);
+            --text-main: #f0f4f8;
+            --text-dim: #9aa7b5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 620px;
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 36px;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        .header-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(0, 103, 192, 0.2);
+            border: 1px solid var(--win-accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #60cdff;
+        }
+
+        .header h1 {
+            font-size: 1.45rem;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+
+        /* Anti-Cheat Security Notice */
+        .security-badge {
+            background: rgba(16, 124, 65, 0.16);
+            border-left: 4px solid var(--hive-green);
+            border-radius: 6px;
+            padding: 14px 16px;
+            margin-bottom: 24px;
+            font-size: 0.86rem;
+            line-height: 1.5;
+            color: #d1f7dc;
+        }
+
+        .security-badge b {
+            color: #74f59c;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #dce5ef;
+        }
+
+        .input-row {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .digit-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 54px 0 16px;
+            background: rgba(12, 16, 24, 0.85);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: #fff;
+            font-size: 1.4rem;
+            letter-spacing: 4px;
+            font-family: monospace;
+            outline: none;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+
+        .digit-input:focus {
+            border-color: #60cdff;
+            box-shadow: 0 0 0 2px rgba(96, 205, 255, 0.2);
+        }
+
+        .char-counter {
+            position: absolute;
+            right: 14px;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Preset buttons */
+        .preset-title {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .preset-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .preset-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #c9d5e3;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s ease;
+        }
+
+        .preset-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.25);
+            color: #fff;
+        }
+
+        .preset-btn span {
+            display: block;
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            height: 46px;
+            background: var(--win-accent);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            background: var(--win-accent-hover);
+        }
+
+        .status-msg {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            display: none;
+        }
+
+        .status-msg.success {
+            background: rgba(16, 124, 65, 0.2);
+            border: 1px solid rgba(16, 124, 65, 0.5);
+            color: #74f59c;
+            display: block;
+        }
+
+        .status-msg.error {
+            background: rgba(232, 17, 35, 0.2);
+            border: 1px solid rgba(232, 17, 35, 0.5);
+            color: #ff99a4;
+            display: block;
+        }
+
+        .footer-links {
+            margin-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            border-top: 1px solid var(--border-color);
+            padding-top: 18px;
+        }
+
+        .footer-links a {
+            color: #60cdff;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                </svg>
+            </div>
+            <div>
+                <h1>Target Password Setup</h1>
+                <p>Isolated Benchmark Controller — Anti-Cheat Architecture</p>
+            </div>
+        </div>
+
+        <!-- Security Isolation Guarantee -->
+        <div class="security-badge">
+            <b>Zero-Cheat Guarantee:</b> Passwords submitted here are stored exclusively in private server-side process memory. The Windows login client DOM, window variables, and automated Jev models receive zero knowledge of this target and can only interact via black-box authentication attempts.
+        </div>
+
+        <form id="admin-form">
+            <div class="form-group">
+                <label for="password-input">Enter Secret Password (9 Characters, Numbers Only: 0-9):</label>
+                <div class="input-row">
+                    <input type="text" id="password-input" class="digit-input" placeholder="482910394" maxlength="9" pattern="\d{9}" required autocomplete="off">
+                    <div id="char-counter" class="char-counter">0 / 9</div>
+                </div>
+            </div>
+
+            <!-- Quick Presets -->
+            <div class="preset-title">Test Benchmark Presets</div>
+            <div class="preset-grid">
+                <button type="button" class="preset-btn" data-pin="RANDOM">
+                    🎲 Random 9 Digits
+                    <span>Cryptographic pseudo-random PIN</span>
+                </button>
+                <button type="button" class="preset-btn" data-pin="123456789">
+                    🔢 Sequential Human
+                    <span>123456789 (Tier 1 prior)</span>
+                </button>
+                <button type="button" class="preset-btn" data-pin="199805121">
+                    📅 Date Pattern
+                    <span>1998-05-12 + 1 (Year/date prior)</span>
+                </button>
+                <button type="button" class="preset-btn" data-pin="147258369">
+                    📱 Numpad Column Walk
+                    <span>147-258-369 (Geometric prior)</span>
+                </button>
+            </div>
+
+            <button type="submit" id="submit-btn" class="submit-btn">
+                🔒 Securely Set Target & Reset Benchmark
+            </button>
+        </form>
+
+        <div id="status-msg" class="status-msg"></div>
+
+        <div class="footer-links">
+            <span>Hive Systems 9-Digit Baseline: <b>2 Hours</b></span>
+            <a href="/" target="_blank">Open Windows Login Screen ↗</a>
+        </div>
+    </div>
+
+    <script src="/static/admin.js"></script>
+</body>
+</html>
