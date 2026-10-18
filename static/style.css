@@ -1,17 +1,20 @@
-/* Windows 11 Fluent Design & Dual Race Styling - Desktop & Mobile Responsive */
+/* ==========================================================================
+   Windows Login Dual Benchmark - Unified Modern Fluent Design
+   Designed for Desktop & Mobile Screens
+   ========================================================================== */
+
 :root {
-    --win-accent: #0067c0;
-    --win-accent-hover: #1877d5;
-    --win-acrylic-bg: rgba(22, 28, 38, 0.85);
-    --win-card-border: rgba(255, 255, 255, 0.14);
+    --win-accent: #0078d4;
+    --win-accent-hover: #198ae8;
+    --win-bg: #0b111a;
+    --win-card: rgba(22, 29, 41, 0.9);
+    --win-card-border: rgba(255, 255, 255, 0.12);
     --win-text: #ffffff;
-    --win-text-sec: #cccccc;
-    --win-text-muted: #888888;
-    --win-focus-border: #60cdff;
-    --brute-color: #d13438;
-    --brute-bg: rgba(209, 52, 56, 0.15);
-    --jev-color: #8764b8;
-    --jev-bg: rgba(135, 100, 184, 0.18);
+    --win-text-dim: #9aa7b5;
+    --brute-red: #d13438;
+    --brute-bg: rgba(209, 52, 56, 0.18);
+    --jev-purple: #8764b8;
+    --jev-bg: rgba(135, 100, 184, 0.2);
     --winner-green: #107c41;
 }
 
@@ -20,65 +23,80 @@
     margin: 0;
     padding: 0;
     font-family: "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-    user-select: none;
+    -webkit-font-smoothing: antialiased;
 }
 
 body, html {
     width: 100%;
-    min-height: 100%;
-    background-color: #050a12;
+    min-height: 100vh;
+    background-color: var(--win-bg);
     color: var(--win-text);
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
-/* Background Wallpaper */
+/* Background Wallpaper & Bloom */
 .desktop-bg {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: radial-gradient(circle at 50% 40%, #152d4e 0%, #0c182b 50%, #050811 100%);
+    background: radial-gradient(circle at 50% 30%, #152d4e 0%, #0c182b 60%, #050811 100%);
     z-index: 1;
-    filter: blur(20px) brightness(0.65);
-    transform: scale(1.05);
+    filter: blur(24px) brightness(0.6);
+    pointer-events: none;
 }
 
 .bloom-glow {
     position: absolute;
-    width: 800px;
-    height: 800px;
+    width: 700px;
+    height: 700px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(0, 103, 192, 0.3) 0%, rgba(135, 100, 184, 0.2) 50%, transparent 70%);
-    top: 50%;
+    background: radial-gradient(circle, rgba(0, 120, 212, 0.25) 0%, rgba(135, 100, 184, 0.18) 50%, transparent 70%);
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
-    pointer-events: none;
 }
 
-/* App Main Layout */
+/* App Container */
 .app-container {
     position: relative;
     z-index: 5;
     width: 100%;
-    min-height: 100vh;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 16px 20px 40px 20px;
     display: flex;
     flex-direction: column;
+    gap: 16px;
 }
 
-/* Top Universal Controller Bar */
-.top-bar {
-    min-height: 68px;
-    background: rgba(18, 24, 34, 0.92);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--win-card-border);
+/* ==========================================================================
+   CONTROL DECK & HEADER (NEVER OVERLAPPING, CLEAN FLOW)
+   ========================================================================== */
+
+.control-deck {
+    background: var(--win-card);
+    border: 1px solid var(--win-card-border);
+    backdrop-filter: blur(24px);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* Row 1: Header + Nav Links */
+.deck-header-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 24px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    z-index: 20;
     flex-wrap: wrap;
     gap: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 12px;
 }
 
 .brand-section {
@@ -90,114 +108,127 @@ body, html {
 .brand-logo {
     width: 32px;
     height: 32px;
-    max-width: 32px;
-    max-height: 32px;
     background: linear-gradient(135deg, #0078d4, #60cdff);
     border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 120, 212, 0.4);
     flex-shrink: 0;
 }
 
 .brand-logo svg {
     width: 18px;
     height: 18px;
-    max-width: 18px;
-    max-height: 18px;
     fill: #fff;
     display: block;
 }
 
 .brand-text h1 {
-    font-size: 1.05rem;
+    font-size: 1.15rem;
     font-weight: 600;
     line-height: 1.2;
 }
 
 .brand-text p {
-    font-size: 0.75rem;
-    color: var(--win-text-muted);
+    font-size: 0.78rem;
+    color: var(--win-text-dim);
 }
 
-/* Password Input & Setup Section */
-.password-setup-group {
+.deck-nav-links {
     display: flex;
     align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 6px 12px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 10px;
     flex-wrap: wrap;
 }
 
-.setup-label {
+.nav-link-btn {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: #60cdff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
     font-size: 0.82rem;
-    color: #cad6e2;
     font-weight: 500;
+    transition: all 0.15s;
+    white-space: nowrap;
 }
 
-.pwd-input-wrap {
+.nav-link-btn:hover {
+    background: #0078d4;
+    color: #fff;
+    border-color: #0078d4;
+}
+
+/* Row 2: Target Password Input & Presets */
+.deck-pin-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pin-input-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.pin-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #cad6e2;
+    white-space: nowrap;
+}
+
+.pin-box-wrap {
     position: relative;
     display: flex;
     align-items: center;
 }
 
 .custom-pwd-input {
-    width: 120px;
-    height: 32px;
-    background: rgba(10, 14, 20, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
+    width: 130px;
+    height: 34px;
+    background: rgba(12, 16, 24, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 5px;
     color: #60cdff;
-    font-size: 1.05rem;
+    font-size: 1.15rem;
     font-family: monospace;
     font-weight: 600;
     letter-spacing: 2px;
     text-align: center;
     outline: none;
-    transition: border 0.2s;
+    transition: all 0.15s;
 }
 
 .custom-pwd-input:focus {
     border-color: #60cdff;
-    box-shadow: 0 0 0 1px #60cdff;
+    box-shadow: 0 0 0 2px rgba(96, 205, 255, 0.25);
 }
 
 .char-badge {
     position: absolute;
-    right: -30px;
+    right: -32px;
     font-size: 0.72rem;
-    color: #8ae8ff;
+    color: #74f59c;
     font-weight: 600;
 }
 
-.preset-chip {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #e0e0e0;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.76rem;
-    cursor: pointer;
-    transition: background 0.15s;
-    white-space: nowrap;
-}
-
-.preset-chip:hover {
-    background: rgba(255, 255, 255, 0.18);
-    color: #fff;
-}
-
 .btn-set-pwd {
-    background: #0078d4;
+    background: var(--win-accent);
     color: #fff;
     border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 0.8rem;
+    padding: 7px 14px;
+    border-radius: 5px;
+    font-size: 0.82rem;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.15s;
@@ -205,11 +236,68 @@ body, html {
 }
 
 .btn-set-pwd:hover {
-    background: #1886df;
+    background: var(--win-accent-hover);
 }
 
-/* Race Global Controls */
-.race-controls {
+.pin-presets-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.preset-chip {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: #d2dee9;
+    padding: 5px 9px;
+    border-radius: 5px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.preset-chip:hover {
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Row 3: Action Buttons & Speed Toggle */
+.deck-actions-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.speed-toggle-wrap {
+    display: flex;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.speed-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    color: #aaa;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.speed-btn.active {
+    background: var(--win-accent);
+    color: #fff;
+    font-weight: 600;
+}
+
+.race-action-buttons {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -219,17 +307,17 @@ body, html {
 .btn-race-start {
     background: #107c41;
     color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 7px 14px;
-    border-radius: 5px;
-    font-size: 0.86rem;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.15s;
+    white-space: nowrap;
     display: flex;
     align-items: center;
     gap: 6px;
-    white-space: nowrap;
 }
 
 .btn-race-start:hover {
@@ -240,9 +328,9 @@ body, html {
     background: rgba(209, 52, 56, 0.85);
     color: #fff;
     border: none;
-    padding: 7px 12px;
-    border-radius: 5px;
-    font-size: 0.86rem;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.88rem;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.15s;
@@ -254,88 +342,92 @@ body, html {
 }
 
 .btn-race-reset {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
     color: #fff;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    padding: 7px 12px;
-    border-radius: 5px;
-    font-size: 0.86rem;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.88rem;
     cursor: pointer;
     transition: background 0.15s;
     white-space: nowrap;
 }
 
 .btn-race-reset:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.18);
 }
 
-.speed-toggle {
+/* Hive Reference Notice Banner */
+.hive-notice-box {
+    background: rgba(16, 124, 65, 0.14);
+    border: 1px solid rgba(16, 124, 65, 0.35);
+    border-radius: 8px;
+    padding: 10px 16px;
     display: flex;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 5px;
-    overflow: hidden;
-}
-
-.speed-btn {
-    background: rgba(255, 255, 255, 0.05);
-    border: none;
-    color: #aaa;
-    padding: 5px 9px;
-    font-size: 0.76rem;
-    cursor: pointer;
-    white-space: nowrap;
-}
-
-.speed-btn.active {
-    background: #0078d4;
-    color: #fff;
-    font-weight: 600;
-}
-
-/* Hive Reference Banner */
-.hive-sub-bar {
-    background: rgba(16, 124, 65, 0.15);
-    border-bottom: 1px solid rgba(16, 124, 65, 0.35);
-    padding: 8px 24px;
-    display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     font-size: 0.82rem;
     color: #d2f8df;
     flex-wrap: wrap;
     gap: 8px;
 }
 
-.hive-sub-bar b {
+.hive-notice-box b {
     color: #ffcc00;
 }
 
-/* Side-by-Side Dual Windows View */
+/* Mobile View Switcher (Visible only on mobile/tablet) */
+.mobile-view-switcher {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.view-tab-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #bbb;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+}
+
+.view-tab-btn.active {
+    background: var(--win-accent);
+    color: #fff;
+    border-color: var(--win-accent);
+}
+
+/* ==========================================================================
+   SIDE-BY-SIDE DUAL WINDOWS VIEWPORT
+   ========================================================================== */
+
 .dual-viewport {
-    flex: 1;
-    display: flex;
-    padding: 20px 24px 30px 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
+    width: 100%;
 }
 
 .monitor-frame {
-    flex: 1;
-    background: rgba(22, 28, 38, 0.82);
-    backdrop-filter: blur(28px);
+    background: var(--win-card);
     border: 2px solid var(--win-card-border);
+    backdrop-filter: blur(28px);
     border-radius: 12px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-    position: relative;
     overflow: hidden;
-    transition: border 0.3s ease, box-shadow 0.3s ease;
-    min-height: 480px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+    transition: all 0.25s ease;
 }
 
 .monitor-frame.winner {
     border-color: #74f59c !important;
-    box-shadow: 0 0 35px rgba(16, 124, 65, 0.6), 0 16px 40px rgba(0, 0, 0, 0.6) !important;
+    box-shadow: 0 0 35px rgba(16, 124, 65, 0.55), 0 16px 40px rgba(0, 0, 0, 0.6) !important;
 }
 
 .monitor-frame.loser {
@@ -343,23 +435,34 @@ body, html {
     border-color: rgba(255, 255, 255, 0.08);
 }
 
+/* Monitor Header */
 .monitor-header {
     height: 48px;
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0.35);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 18px;
+    padding: 0 16px;
+    gap: 10px;
+}
+
+.monitor-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
 }
 
 .monitor-badge {
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 3px 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 7px;
     border-radius: 4px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .badge-brute {
@@ -375,16 +478,21 @@ body, html {
 }
 
 .monitor-title {
-    font-size: 0.92rem;
+    font-size: 0.88rem;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .monitor-status-pill {
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     padding: 2px 8px;
-    border-radius: 12px;
+    border-radius: 10px;
     background: rgba(255, 255, 255, 0.08);
     color: #aaa;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .monitor-status-pill.cracked {
@@ -393,24 +501,23 @@ body, html {
     font-weight: 600;
 }
 
-/* Simulated Windows Login Screen Canvas inside Frame */
+/* Simulated Windows Login Screen Area */
 .monitor-screen {
     flex: 1;
+    min-height: 320px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
-    padding: 20px;
+    padding: 24px 16px;
 }
 
 .win-avatar-circle {
-    width: 90px;
-    height: 90px;
-    max-width: 90px;
-    max-height: 90px;
+    width: 78px;
+    height: 78px;
     border-radius: 50%;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -428,48 +535,49 @@ body, html {
 }
 
 .win-avatar-circle svg {
-    width: 48px;
-    height: 48px;
-    max-width: 48px;
-    max-height: 48px;
+    width: 42px;
+    height: 42px;
     fill: #e0e0e0;
     display: block;
 }
 
 .win-profile-name {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
     font-weight: 500;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
+    text-align: center;
 }
 
 /* Password Input Mockup */
 .win-input-row {
     position: relative;
-    width: 260px;
+    width: 250px;
+    max-width: 100%;
     display: flex;
     align-items: center;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
 }
 
 .win-input-mock {
     width: 100%;
-    height: 38px;
-    background: rgba(15, 20, 28, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    height: 36px;
+    background: rgba(12, 16, 24, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 4px;
     color: #fff;
     font-size: 1.15rem;
     letter-spacing: 2px;
-    padding: 0 42px 0 12px;
+    padding: 0 38px 0 12px;
     outline: none;
     font-variant-numeric: tabular-nums;
+    text-align: center;
 }
 
 .win-arrow-btn {
     position: absolute;
     right: 4px;
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     background: rgba(255, 255, 255, 0.1);
     border: none;
     border-radius: 4px;
@@ -480,27 +588,25 @@ body, html {
 }
 
 .win-arrow-btn svg {
-    width: 16px;
-    height: 16px;
-    max-width: 16px;
-    max-height: 16px;
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
     display: block;
 }
 
 /* Windows Fail Dialog Mockup inside Monitor */
 .screen-fail-dialog {
     position: absolute;
-    width: 280px;
-    background: rgba(30, 30, 30, 0.95);
+    width: 260px;
+    background: rgba(30, 30, 30, 0.96);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
-    padding: 16px;
+    padding: 14px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
     display: none;
     flex-direction: column;
     z-index: 10;
-    animation: win-pop 0.15s ease-out;
 }
 
 .screen-fail-dialog.active {
@@ -508,9 +614,9 @@ body, html {
 }
 
 .fail-dialog-msg {
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     color: #fff;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     line-height: 1.3;
 }
 
@@ -519,26 +625,25 @@ body, html {
     background: var(--win-accent);
     color: #fff;
     border: none;
-    padding: 5px 18px;
+    padding: 4px 16px;
     border-radius: 4px;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 500;
 }
 
 /* Winner Celebration Card inside Monitor */
 .screen-winner-card {
     position: absolute;
-    width: 300px;
-    background: rgba(16, 124, 65, 0.95);
+    width: 280px;
+    background: rgba(16, 124, 65, 0.96);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 10px;
-    padding: 20px;
+    padding: 18px;
     display: none;
     flex-direction: column;
     align-items: center;
     text-align: center;
     z-index: 15;
-    animation: win-pop 0.25s ease-out;
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
 }
 
@@ -547,32 +652,31 @@ body, html {
 }
 
 .winner-icon {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     background: rgba(255, 255, 255, 0.2);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .winner-icon svg {
-    width: 24px;
-    height: 24px;
-    max-width: 24px;
-    max-height: 24px;
+    width: 22px;
+    height: 22px;
+    fill: #fff;
     display: block;
 }
 
 /* Live Telemetry Panel on each Monitor Bottom */
 .monitor-telemetry {
-    background: rgba(12, 16, 24, 0.85);
+    background: rgba(10, 14, 22, 0.9);
     border-top: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 12px 18px;
+    padding: 12px 16px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
 }
 
 .stat-cell {
@@ -581,20 +685,23 @@ body, html {
 }
 
 .stat-title {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     color: #888;
     text-transform: uppercase;
     margin-bottom: 2px;
 }
 
 .stat-number {
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     color: #60cdff;
 }
 
-/* Race Finished Modal */
+/* ==========================================================================
+   RACE FINISHED CELEBRATION MODAL
+   ========================================================================== */
+
 #race-winner-modal {
     position: fixed;
     top: 0;
@@ -607,6 +714,7 @@ body, html {
     align-items: center;
     justify-content: center;
     z-index: 100;
+    padding: 16px;
 }
 
 #race-winner-modal.active {
@@ -614,41 +722,41 @@ body, html {
 }
 
 .race-winner-card {
-    width: 90%;
-    max-width: 520px;
-    background: rgba(24, 30, 42, 0.95);
+    width: 100%;
+    max-width: 500px;
+    background: rgba(22, 28, 40, 0.96);
     border: 1px solid rgba(16, 124, 65, 0.6);
     border-radius: 12px;
-    padding: 26px;
+    padding: 24px;
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(16, 124, 65, 0.4);
     text-align: center;
-    animation: win-pop 0.25s ease-out;
 }
 
 .race-winner-title {
-    font-size: 1.5rem;
+    font-size: 1.45rem;
     font-weight: 600;
     margin-bottom: 4px;
 }
 
 .race-winner-sub {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     color: #74f59c;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
+    line-height: 1.4;
 }
 
 .comparison-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
-    font-size: 0.88rem;
-    background: rgba(0, 0, 0, 0.25);
+    margin-bottom: 18px;
+    font-size: 0.85rem;
+    background: rgba(0, 0, 0, 0.3);
     border-radius: 6px;
     overflow: hidden;
 }
 
 .comparison-table th, .comparison-table td {
-    padding: 10px 12px;
+    padding: 8px 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -673,65 +781,91 @@ body, html {
     font-weight: 600;
 }
 
-@keyframes win-pop {
-    0% { transform: scale(0.92); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
 /* ==========================================================================
-   MOBILE & TABLET RESPONSIVE RULES (FIXES PHONE SQUISHING & OVERFLOWS)
+   RESPONSIVE LAYOUT FOR MOBILE SCREENS (< 850px)
    ========================================================================== */
-@media (max-width: 900px) {
-    body, html {
-        overflow-y: auto !important;
-        height: auto !important;
-    }
 
+@media (max-width: 850px) {
     .app-container {
-        height: auto !important;
-        min-height: 100vh;
-    }
-
-    .top-bar {
-        padding: 12px 16px;
-        flex-direction: column;
-        align-items: stretch;
+        padding: 12px 12px 30px 12px;
         gap: 12px;
     }
 
-    .brand-section {
-        justify-content: center;
+    .control-deck {
+        padding: 14px;
+        gap: 12px;
     }
 
-    .password-setup-group {
-        justify-content: center;
-        width: 100%;
-    }
-
-    .race-controls {
-        justify-content: center;
-        width: 100%;
-    }
-
-    .hive-sub-bar {
-        padding: 8px 16px;
+    .deck-header-row {
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .brand-section {
+        width: 100%;
+    }
+
+    .deck-nav-links {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .deck-pin-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .pin-input-group {
+        justify-content: space-between;
+    }
+
+    .pin-presets-group {
+        justify-content: flex-start;
+    }
+
+    .deck-actions-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .speed-toggle-wrap {
+        width: 100%;
+    }
+
+    .speed-btn {
+        flex: 1;
         text-align: center;
     }
 
-    .dual-viewport {
-        flex-direction: column;
-        padding: 12px 14px 40px 14px;
-        gap: 18px;
-    }
-
-    .monitor-frame {
+    .race-action-buttons {
         width: 100%;
-        min-height: 420px;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 8px;
     }
 
-    .monitor-screen {
-        padding: 24px 12px;
+    .btn-race-start, .btn-race-stop, .btn-race-reset {
+        justify-content: center;
+    }
+
+    .mobile-view-switcher {
+        display: grid;
+    }
+
+    .dual-viewport {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    /* Tab switcher toggles on mobile */
+    .dual-viewport.tab-brute #frame-jev {
+        display: none !important;
+    }
+
+    .dual-viewport.tab-jev #frame-brute {
+        display: none !important;
     }
 }

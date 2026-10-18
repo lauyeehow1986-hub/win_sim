@@ -3,17 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Windows Login Simulation - Brute Force vs Jev Dual Race</title>
-    <!-- Relative paths for both GitHub Pages and local Python server -->
+    <title>Windows Login Dual Benchmark - Brute Force vs Jev</title>
+    <!-- Relative paths for GitHub Pages and local server -->
     <link rel="stylesheet" href="./static/style.css">
     <link rel="stylesheet" href="./style.css">
-    <style>
-        /* Fallback safety rules so SVGs and elements never blow up before CSS loads */
-        svg { max-width: 100%; height: auto; }
-        .brand-logo svg { width: 18px !important; height: 18px !important; }
-        .win-avatar-circle svg { width: 48px !important; height: 48px !important; }
-        .win-arrow-btn svg { width: 14px !important; height: 14px !important; }
-    </style>
 </head>
 <body>
 
@@ -23,79 +16,92 @@
     </div>
 
     <div class="app-container">
-        <!-- TOP UNIVERSAL CONTROLLER BAR -->
-        <header class="top-bar">
-            <!-- Brand -->
-            <div class="brand-section">
-                <div class="brand-logo" style="width:32px; height:32px; flex-shrink:0;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" style="width:18px; height:18px;">
-                        <path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/>
-                    </svg>
+        <!-- TOP CONTROL DECK (CLEAN GRID, ZERO OVERLAYS) -->
+        <header class="control-deck">
+            <!-- Row 1: Brand & Top Links -->
+            <div class="deck-header-row">
+                <div class="brand-section">
+                    <div class="brand-logo">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/>
+                        </svg>
+                    </div>
+                    <div class="brand-text">
+                        <h1>Windows Login Dual Benchmark</h1>
+                        <p>Sequential Brute Force vs. Jev Model (System 1)</p>
+                    </div>
                 </div>
-                <div class="brand-text">
-                    <h1>Windows Login Dual Benchmark</h1>
-                    <p>Brute Force vs Jev Model</p>
+
+                <div class="deck-nav-links">
+                    <a href="./report.html" class="nav-link-btn">📊 1,000-Run Report</a>
+                    <a href="./admin.html" class="nav-link-btn">🛡️ Password Setup</a>
+                    <a href="https://github.com/lauyeehow1986-hub/win_sim" target="_blank" class="nav-link-btn">GitHub ↗</a>
                 </div>
             </div>
 
-            <!-- Set Target Password Group (Anti-Cheat In-App Controller) -->
-            <div class="password-setup-group">
-                <span class="setup-label">Target PIN:</span>
-                <div class="pwd-input-wrap">
-                    <input type="text" id="target-pwd-input" class="custom-pwd-input" value="199805121" maxlength="9" placeholder="9 digits" autocomplete="off">
-                    <span id="target-char-counter" class="char-badge">9/9</span>
+            <!-- Row 2: Target Password Input & Preset Chips -->
+            <div class="deck-pin-row">
+                <div class="pin-input-group">
+                    <span class="pin-label">Target PIN:</span>
+                    <div class="pin-box-wrap">
+                        <input type="text" id="target-pwd-input" class="custom-pwd-input" value="199805121" maxlength="9" placeholder="9 digits" autocomplete="off">
+                        <span id="target-char-counter" class="char-badge">9/9</span>
+                    </div>
+                    <button type="button" id="btn-apply-pwd" class="btn-set-pwd">✓ Set PIN</button>
                 </div>
 
-                <!-- Quick Presets -->
-                <button type="button" class="preset-chip" id="preset-random" title="Random 9 digits">🎲 Random</button>
-                <button type="button" class="preset-chip" id="preset-date" title="Birth / Date pattern">📅 199805121</button>
-                <button type="button" class="preset-chip" id="preset-seq" title="Sequential sequence">🔢 123456789</button>
-                <button type="button" class="preset-chip" id="preset-numpad" title="Numpad column walk">📱 147258369</button>
-
-                <button type="button" id="btn-apply-pwd" class="btn-set-pwd">✓ Set PIN</button>
+                <div class="pin-presets-group">
+                    <button type="button" class="preset-chip" id="preset-random" title="Random 9 digits">🎲 Random</button>
+                    <button type="button" class="preset-chip" id="preset-date" title="Birth / Date pattern">📅 199805121</button>
+                    <button type="button" class="preset-chip" id="preset-seq" title="Sequential sequence">🔢 123456789</button>
+                    <button type="button" class="preset-chip" id="preset-numpad" title="Numpad column walk">📱 147258369</button>
+                </div>
             </div>
 
-            <!-- Race Action Buttons & Speed Modes -->
-            <div class="race-controls">
-                <div class="speed-toggle">
-                    <button id="speed-visual" class="speed-btn active">Visual UI</button>
-                    <button id="speed-turbo" class="speed-btn">Turbo Speed</button>
+            <!-- Row 3: Action Controls & Speed Toggle -->
+            <div class="deck-actions-row">
+                <div class="speed-toggle-wrap">
+                    <button id="speed-visual" class="speed-btn active">Visual UI Mode</button>
+                    <button id="speed-turbo" class="speed-btn">Turbo Benchmark Mode</button>
                 </div>
 
-                <button id="btn-race-start" class="btn-race-start">▶ Start Dual Race</button>
-                <button id="btn-race-stop" class="btn-race-stop">⏸ Stop</button>
-                <button id="btn-race-reset" class="btn-race-reset">↺ Reset</button>
+                <div class="race-action-buttons">
+                    <button id="btn-race-start" class="btn-race-start">▶ Start Dual Race</button>
+                    <button id="btn-race-stop" class="btn-race-stop">⏸ Stop</button>
+                    <button id="btn-race-reset" class="btn-race-reset">↺ Reset</button>
+                </div>
+            </div>
+
+            <!-- Row 4: Hive Systems Reference Banner -->
+            <div class="hive-notice-box">
+                <span><b>Hive Systems Benchmark Reference:</b> 9 Digits (0-9) = 1,000,000,000 combinations. Reported exhaustive time: <b>2 Hours</b>.</span>
+                <span style="color:#60cdff; font-weight:500;">Zero-Lockout Continuous Retrying</span>
             </div>
         </header>
 
-        <!-- Hive Systems Reference Sub-Banner -->
-        <div class="hive-sub-bar">
-            <div>
-                <span><b>Hive Systems Benchmark Reference:</b> 9 Digits (0-9) = 1,000,000,000 combinations. Reported exhaustive cracking time: <b>2 Hours</b>.</span>
-            </div>
-            <div style="display:flex; gap:16px;">
-                <a href="./report.html" style="color: #60cdff; font-weight: 600; text-decoration: underline;">📊 1,000-Run Benchmark Report</a>
-                <a href="./admin.html" style="color: #6ce496; text-decoration: underline;">🛡️ Password Setup (Admin) ↗</a>
-            </div>
+        <!-- Mobile View Switcher (Displayed on narrow phone screens) -->
+        <div class="mobile-view-switcher">
+            <button id="tab-both" class="view-tab-btn active">⚔️ Stacked View</button>
+            <button id="tab-toggle" class="view-tab-btn">Toggle Focus ⇄</button>
         </div>
 
         <!-- SIDE-BY-SIDE DUAL WINDOWS VIEWPORT -->
-        <main class="dual-viewport">
+        <main id="dual-viewport" class="dual-viewport">
 
             <!-- LEFT WINDOW: HIVE SYSTEMS SEQUENTIAL BRUTE FORCE -->
-            <div id="frame-brute" class="monitor-frame">
+            <section id="frame-brute" class="monitor-frame">
                 <div class="monitor-header">
-                    <div style="display:flex; align-items:center; gap:8px;">
+                    <div class="monitor-title-wrap">
                         <span class="monitor-badge badge-brute">Sequential</span>
                         <span class="monitor-title">Brute Force Agent</span>
                     </div>
-                    <span id="status-brute" class="monitor-status-pill">Ready (000000000 →)</span>
+                    <span id="status-brute" class="monitor-status-pill">Ready</span>
                 </div>
 
-                <!-- Windows Login Screen Simulation: Brute Force -->
+                <!-- Windows Login Screen Area: Brute Force -->
                 <div class="monitor-screen">
-                    <div class="win-avatar-circle brute" style="width:90px; height:90px;">
-                        <svg width="48" height="48" viewBox="0 0 24 24" style="width:48px; height:48px;">
+                    <div class="win-avatar-circle brute">
+                        <svg viewBox="0 0 24 24">
                             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                         </svg>
                     </div>
@@ -103,8 +109,8 @@
 
                     <div class="win-input-row">
                         <input type="text" id="input-brute" class="win-input-mock" readonly placeholder="•••••••••">
-                        <button class="win-arrow-btn">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="width:14px; height:14px;">
+                        <button class="win-arrow-btn" aria-label="Submit">
+                            <svg viewBox="0 0 24 24">
                                 <path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-7.85-1.42 1.42L16.86 11H5v2z"/>
                             </svg>
                         </button>
@@ -118,13 +124,13 @@
 
                     <!-- Winner Celebration Card -->
                     <div id="winner-brute" class="screen-winner-card">
-                        <div class="winner-icon" style="width:44px; height:44px;">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff" style="width:24px; height:24px;">
+                        <div class="winner-icon">
+                            <svg viewBox="0 0 24 24">
                                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                             </svg>
                         </div>
-                        <h2 style="font-size:1.3rem; margin-bottom:4px;">BRUTE FORCE WON!</h2>
-                        <p style="font-size:0.85rem; color:#d2f8df;">Cracked password successfully</p>
+                        <h2 style="font-size:1.25rem; margin-bottom:4px;">BRUTE FORCE WON!</h2>
+                        <p style="font-size:0.82rem; color:#d2f8df;">Cracked password successfully</p>
                     </div>
                 </div>
 
@@ -143,22 +149,22 @@
                         <span id="rate-brute" class="stat-number">0 /s</span>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- RIGHT WINDOW: JEV MODEL (SYSTEM 1 CALIBRATED PRIORS) -->
-            <div id="frame-jev" class="monitor-frame">
+            <section id="frame-jev" class="monitor-frame">
                 <div class="monitor-header">
-                    <div style="display:flex; align-items:center; gap:8px;">
+                    <div class="monitor-title-wrap">
                         <span class="monitor-badge badge-jev">System 1</span>
                         <span class="monitor-title">Jev Calibrated Model</span>
                     </div>
-                    <span id="status-jev" class="monitor-status-pill">Ready (Priors + Stratified)</span>
+                    <span id="status-jev" class="monitor-status-pill">Ready</span>
                 </div>
 
-                <!-- Windows Login Screen Simulation: Jev Model -->
+                <!-- Windows Login Screen Area: Jev Model -->
                 <div class="monitor-screen">
-                    <div class="win-avatar-circle jev" style="width:90px; height:90px;">
-                        <svg width="48" height="48" viewBox="0 0 24 24" style="width:48px; height:48px;">
+                    <div class="win-avatar-circle jev">
+                        <svg viewBox="0 0 24 24">
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
                         </svg>
                     </div>
@@ -166,8 +172,8 @@
 
                     <div class="win-input-row">
                         <input type="text" id="input-jev" class="win-input-mock" readonly placeholder="•••••••••">
-                        <button class="win-arrow-btn">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="width:14px; height:14px;">
+                        <button class="win-arrow-btn" aria-label="Submit">
+                            <svg viewBox="0 0 24 24">
                                 <path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-7.85-1.42 1.42L16.86 11H5v2z"/>
                             </svg>
                         </button>
@@ -181,13 +187,13 @@
 
                     <!-- Winner Celebration Card -->
                     <div id="winner-jev" class="screen-winner-card">
-                        <div class="winner-icon" style="width:44px; height:44px;">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff" style="width:24px; height:24px;">
+                        <div class="winner-icon">
+                            <svg viewBox="0 0 24 24">
                                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                             </svg>
                         </div>
-                        <h2 style="font-size:1.3rem; margin-bottom:4px;">JEV MODEL WON!</h2>
-                        <p style="font-size:0.85rem; color:#d2f8df;">Cracked password successfully</p>
+                        <h2 style="font-size:1.25rem; margin-bottom:4px;">JEV MODEL WON!</h2>
+                        <p style="font-size:0.82rem; color:#d2f8df;">Cracked password successfully</p>
                     </div>
                 </div>
 
@@ -206,7 +212,7 @@
                         <span id="rate-jev" class="stat-number">0 /s</span>
                     </div>
                 </div>
-            </div>
+            </section>
 
         </main>
     </div>
@@ -259,7 +265,7 @@
         </div>
     </div>
 
-    <!-- Scripts with both relative and static fallbacks -->
+    <!-- Relative Script Loading -->
     <script src="./static/sounds.js"></script>
     <script src="./sounds.js"></script>
     <script src="./static/app.js"></script>

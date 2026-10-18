@@ -189,6 +189,38 @@ document.addEventListener("DOMContentLoaded", () => {
         raceWinnerModal.classList.remove("active");
     });
 
+    // Mobile View Tab Switcher
+    const tabBoth = document.getElementById("tab-both");
+    const tabToggle = document.getElementById("tab-toggle");
+    const dualViewport = document.getElementById("dual-viewport");
+
+    if (tabBoth && tabToggle && dualViewport) {
+        let currentMobileTab = "both";
+        tabBoth.addEventListener("click", () => {
+            currentMobileTab = "both";
+            dualViewport.classList.remove("tab-brute", "tab-jev");
+            tabBoth.classList.add("active");
+            tabToggle.classList.remove("active");
+            tabToggle.textContent = "Toggle Focus ⇄";
+        });
+
+        tabToggle.addEventListener("click", () => {
+            if (currentMobileTab === "both" || currentMobileTab === "jev") {
+                currentMobileTab = "brute";
+                dualViewport.classList.add("tab-brute");
+                dualViewport.classList.remove("tab-jev");
+                tabToggle.textContent = "Focus: Brute Force";
+            } else {
+                currentMobileTab = "jev";
+                dualViewport.classList.add("tab-jev");
+                dualViewport.classList.remove("tab-brute");
+                tabToggle.textContent = "Focus: Jev Model";
+            }
+            tabBoth.classList.remove("active");
+            tabToggle.classList.add("active");
+        });
+    }
+
     function resetVisuals() {
         frameBrute.classList.remove("winner", "loser");
         frameJev.classList.remove("winner", "loser");
