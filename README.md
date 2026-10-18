@@ -29,12 +29,37 @@ A real-time, side-by-side Windows 11 simulated login race comparing **Sequential
    - **Visual Mode**: Paced with realistic typing, submit animations, and Windows "The password is incorrect. Try again." failure dialogs.
    - **Turbo Mode**: Runs both algorithms at full hardware throughput (150,000+ tries/sec) to benchmark millions of combinations in seconds.
 
+## 🌐 GitHub Pages Live Demo & Benchmark Report
+
+- **Live Dual Simulator**: [https://lauyeehow1986-hub.github.io/win_sim/](https://lauyeehow1986-hub.github.io/win_sim/)
+- **Interactive 1,000-Run Report**: [https://lauyeehow1986-hub.github.io/win_sim/report.html](https://lauyeehow1986-hub.github.io/win_sim/report.html)
+- **Raw Markdown Report**: [`headless_benchmark_report.md`](headless_benchmark_report.md)
+- **Target Password Admin Setup**: [https://lauyeehow1986-hub.github.io/win_sim/admin.html](https://lauyeehow1986-hub.github.io/win_sim/admin.html)
+
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Local)
 
-1. Ensure the server is running (`python server.py` or double-click [`run.bat`](file:///c:/Users/lauye/Downloads/windows_sim/run.bat)).
-2. Open [`http://localhost:8000/`](http://localhost:8000/) in your browser.
-3. Type any custom 9-digit password in the top **Target PIN** box (or click one of the presets) and click **✓ Set PIN**.
-4. Select **Visual UI** or **Turbo Speed**, and click **▶ Start Dual Race**!
-5. Watch both screens race in real time, see who cracks it first, and inspect the victory breakdown!
+1. Ensure Python 3.10+ is installed.
+2. Launch the local server:
+   ```powershell
+   python server.py
+   # Or double-click run.bat
+   ```
+3. Open [`http://localhost:8000/`](http://localhost:8000/) in your browser.
+4. Type any custom 9-digit password in the top **Target PIN** box (or click one of the presets) and click **✓ Set PIN**.
+5. Select **Visual UI** or **Turbo Speed**, and click **▶ Start Dual Race**!
+6. View the benchmark report at [`http://localhost:8000/report`](http://localhost:8000/report).
+
+---
+
+## ⚙️ Enabling GitHub Pages
+
+To activate the GitHub Pages URL on your repository:
+1. Go to your repository on GitHub: [https://github.com/lauyeehow1986-hub/win_sim](https://github.com/lauyeehow1986-hub/win_sim)
+2. Click **Settings** (gear icon) > **Pages** (under Code and automation in the left sidebar).
+3. Under **Build and deployment** > **Source**, select **Deploy from a branch**.
+4. Under **Branch**, select `main` and folder `/ (root)`, then click **Save**.
+5. Within 1–2 minutes, GitHub will deploy your site to:
+   **`https://lauyeehow1986-hub.github.io/win_sim/`**
+

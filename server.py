@@ -205,6 +205,12 @@ mgr = BenchmarkManager()
 async def handle_index(request):
     return web.FileResponse(os.path.join(STATIC_DIR, "index.html"))
 
+async def handle_report(request):
+    report_path = os.path.join(BASE_DIR, "report.html")
+    if os.path.exists(report_path):
+        return web.FileResponse(report_path)
+    return web.Response(text="Report not found", status=404)
+
 async def handle_admin(request):
     return web.FileResponse(os.path.join(STATIC_DIR, "admin.html"))
 
@@ -331,6 +337,7 @@ async def websocket_handler(request):
 def create_app():
     app = web.Application()
     app.router.add_get("/", handle_index)
+    app.router.add_get("/report", handle_report)
     app.router.add_get("/admin", handle_admin)
     app.router.add_post("/api/login", api_login)
     app.router.add_post("/api/admin/set-password", api_admin_set_password)

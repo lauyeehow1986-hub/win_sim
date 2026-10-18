@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows Login Simulation - Brute Force vs Jev Dual Race</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <!-- Desktop Background with Acrylic Bloom -->
+    <div id="desktop-bg" class="desktop-bg">
+        <div class="bloom-glow"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- TOP UNIVERSAL CONTROLLER BAR -->
+        <header class="top-bar">
+            <!-- Brand -->
+            <div class="brand-section">
+                <div class="brand-logo">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <h1>Windows Login Dual Benchmark</h1>
+                    <p>Brute Force vs Jev Model</p>
+                </div>
+            </div>
+
+            <!-- Set Target Password Group (Anti-Cheat In-App Controller) -->
+            <div class="password-setup-group">
+                <span class="setup-label">Target PIN:</span>
+                <div class="pwd-input-wrap">
+                    <input type="text" id="target-pwd-input" class="custom-pwd-input" value="199805121" maxlength="9" placeholder="9 digits" autocomplete="off">
+                    <span id="target-char-counter" class="char-badge">9/9</span>
+                </div>
+
+                <!-- Quick Presets -->
+                <button type="button" class="preset-chip" id="preset-random" title="Random 9 digits">🎲 Random</button>
+                <button type="button" class="preset-chip" id="preset-date" title="Birth / Date pattern">📅 199805121</button>
+                <button type="button" class="preset-chip" id="preset-seq" title="Sequential sequence">🔢 123456789</button>
+                <button type="button" class="preset-chip" id="preset-numpad" title="Numpad column walk">📱 147258369</button>
+
+                <button type="button" id="btn-apply-pwd" class="btn-set-pwd">✓ Set PIN</button>
+            </div>
+
+            <!-- Race Action Buttons & Speed Modes -->
+            <div class="race-controls">
+                <div class="speed-toggle">
+                    <button id="speed-visual" class="speed-btn active">Visual UI</button>
+                    <button id="speed-turbo" class="speed-btn">Turbo Speed</button>
+                </div>
+
+                <button id="btn-race-start" class="btn-race-start">▶ Start Dual Race</button>
+                <button id="btn-race-stop" class="btn-race-stop">⏸ Stop</button>
+                <button id="btn-race-reset" class="btn-race-reset">↺ Reset</button>
+            </div>
+        </header>
+
+        <!-- Hive Systems Reference Sub-Banner -->
+        <div class="hive-sub-bar">
+            <div>
+                <span><b>Hive Systems Benchmark Reference:</b> 9 Digits (0-9) = 1,000,000,000 combinations. Reported exhaustive cracking time: <b>2 Hours</b>.</span>
+            </div>
+            <div style="display:flex; gap:16px;">
+                <a href="./report.html" style="color: #60cdff; font-weight: 600; text-decoration: underline;">📊 1,000-Run Benchmark Report</a>
+                <a href="./admin.html" style="color: #6ce496; text-decoration: underline;">🛡️ Password Setup (Admin) ↗</a>
+            </div>
+        </div>
+
+        <!-- SIDE-BY-SIDE DUAL WINDOWS VIEWPORT -->
+        <main class="dual-viewport">
+
+            <!-- LEFT WINDOW: HIVE SYSTEMS SEQUENTIAL BRUTE FORCE -->
+            <div id="frame-brute" class="monitor-frame">
+                <div class="monitor-header">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span class="monitor-badge badge-brute">Sequential</span>
+                        <span class="monitor-title">Brute Force Agent</span>
+                    </div>
+                    <span id="status-brute" class="monitor-status-pill">Ready (000000000 →)</span>
+                </div>
+
+                <!-- Windows Login Screen Simulation: Brute Force -->
+                <div class="monitor-screen">
+                    <div class="win-avatar-circle brute">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </div>
+                    <div class="win-profile-name">Brute Force</div>
+
+                    <div class="win-input-row">
+                        <input type="text" id="input-brute" class="win-input-mock" readonly placeholder="•••••••••">
+                        <button class="win-arrow-btn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-7.85-1.42 1.42L16.86 11H5v2z"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Fail Dialog Mockup -->
+                    <div id="dialog-brute" class="screen-fail-dialog">
+                        <div class="fail-dialog-msg">The password is incorrect. Retrying...</div>
+                        <button class="fail-dialog-ok">OK</button>
+                    </div>
+
+                    <!-- Winner Celebration Card -->
+                    <div id="winner-brute" class="screen-winner-card">
+                        <div class="winner-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </div>
+                        <h2 style="font-size:1.3rem; margin-bottom:4px;">BRUTE FORCE WON!</h2>
+                        <p style="font-size:0.85rem; color:#d2f8df;">Cracked password successfully</p>
+                    </div>
+                </div>
+
+                <!-- Live Telemetry Footer: Brute Force -->
+                <div class="monitor-telemetry">
+                    <div class="stat-cell">
+                        <span class="stat-title">Attempts</span>
+                        <span id="tries-brute" class="stat-number">0</span>
+                    </div>
+                    <div class="stat-cell">
+                        <span class="stat-title">Elapsed</span>
+                        <span id="time-brute" class="stat-number">00:00:00.0</span>
+                    </div>
+                    <div class="stat-cell">
+                        <span class="stat-title">Speed</span>
+                        <span id="rate-brute" class="stat-number">0 /s</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT WINDOW: JEV MODEL (SYSTEM 1 CALIBRATED PRIORS) -->
+            <div id="frame-jev" class="monitor-frame">
+                <div class="monitor-header">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span class="monitor-badge badge-jev">System 1</span>
+                        <span class="monitor-title">Jev Calibrated Model</span>
+                    </div>
+                    <span id="status-jev" class="monitor-status-pill">Ready (Priors + Stratified)</span>
+                </div>
+
+                <!-- Windows Login Screen Simulation: Jev Model -->
+                <div class="monitor-screen">
+                    <div class="win-avatar-circle jev">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                        </svg>
+                    </div>
+                    <div class="win-profile-name">Jev Model</div>
+
+                    <div class="win-input-row">
+                        <input type="text" id="input-jev" class="win-input-mock" readonly placeholder="•••••••••">
+                        <button class="win-arrow-btn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-7.85-1.42 1.42L16.86 11H5v2z"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Fail Dialog Mockup -->
+                    <div id="dialog-jev" class="screen-fail-dialog">
+                        <div class="fail-dialog-msg">The password is incorrect. Retrying...</div>
+                        <button class="fail-dialog-ok">OK</button>
+                    </div>
+
+                    <!-- Winner Celebration Card -->
+                    <div id="winner-jev" class="screen-winner-card">
+                        <div class="winner-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                            </svg>
+                        </div>
+                        <h2 style="font-size:1.3rem; margin-bottom:4px;">JEV MODEL WON!</h2>
+                        <p style="font-size:0.85rem; color:#d2f8df;">Cracked password successfully</p>
+                    </div>
+                </div>
+
+                <!-- Live Telemetry Footer: Jev Model -->
+                <div class="monitor-telemetry">
+                    <div class="stat-cell">
+                        <span class="stat-title">Attempts</span>
+                        <span id="tries-jev" class="stat-number">0</span>
+                    </div>
+                    <div class="stat-cell">
+                        <span class="stat-title">Elapsed</span>
+                        <span id="time-jev" class="stat-number">00:00:00.0</span>
+                    </div>
+                    <div class="stat-cell">
+                        <span class="stat-title">Speed</span>
+                        <span id="rate-jev" class="stat-number">0 /s</span>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- RACE FINISHED SUMMARY MODAL -->
+    <div id="race-winner-modal">
+        <div class="race-winner-card">
+            <h2 id="modal-winner-title" class="race-winner-title">🏁 Race Complete!</h2>
+            <p id="modal-winner-sub" class="race-winner-sub">Jev Model beat Brute Force to the solution</p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Sequential Brute Force</th>
+                        <th>Jev Calibrated Model</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Cracked Status</td>
+                        <td id="table-status-brute">In Progress</td>
+                        <td id="table-status-jev">Cracked ✓</td>
+                    </tr>
+                    <tr>
+                        <td>Tries Count</td>
+                        <td id="table-tries-brute">0</td>
+                        <td id="table-tries-jev">0</td>
+                    </tr>
+                    <tr>
+                        <td>Time Elapsed</td>
+                        <td id="table-time-brute">0.00s</td>
+                        <td id="table-time-jev">0.00s</td>
+                    </tr>
+                    <tr>
+                        <td>Throughput</td>
+                        <td id="table-rate-brute">0 /s</td>
+                        <td id="table-rate-jev">0 /s</td>
+                    </tr>
+                    <tr>
+                        <td>Hive Systems (2h) Baseline</td>
+                        <td colspan="2" style="color: #ffcc00; text-align: center;">2 Hours (~138,888 tries/sec)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button id="modal-close-btn" class="btn-race-start" style="width: 100%; justify-content: center;">
+                Close & Return to Race
+            </button>
+        </div>
+    </div>
+
+    <script src="/static/sounds.js"></script>
+    <script src="/static/app.js"></script>
+</body>
+</html>

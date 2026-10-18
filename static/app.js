@@ -1,5 +1,6 @@
 /**
  * app.js - Dual Window Controller: Brute Force vs Jev Model
+ * Supports both Live Python WebSocket backend and Standalone Browser (GitHub Pages).
  */
 document.addEventListener("DOMContentLoaded", () => {
     // --- Elements: Password Controller ---
@@ -55,7 +56,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Internal State
     let currentSpeedMode = "visual";
     let ws = null;
+    let isConnectedWs = false;
+    let isClientMode = false;
     let hasAlertedWinner = false;
+    let localSecret = "199805121";
+    let clientTimer = null;
+    let clientStart = 0;
+    let clientTriesBrute = 0;
+    let clientTriesJev = 0;
 
     // --- Custom Password Input Logic ---
     function updateCharCounter() {
@@ -73,25 +81,26 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        try {
-            const resp = await fetch("/api/admin/set-password", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ password: pwd })
-            });
-            const data = await resp.json();
-            if (data.success) {
-                resetVisuals();
-                btnApplyPwd.textContent = "✓ Saved!";
-                btnApplyPwd.style.background = "#107c41";
-                setTimeout(() => {
-                    btnApplyPwd.textContent = "✓ Set PIN";
-                    btnApplyPwd.style.background = "#0078d4";
-                }, 1500);
-            }
-        } catch (err) {
-            alert("Error setting password: " + err.message);
+        localSecret = pwd;
+
+        if (isConnectedWs) {
+            try {
+                const resp = await fetch("/api/admin/set-password", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ password: pwd })
+                });
+                await resp.json();
+            } catch (e) {}
         }
+
+        resetVisuals();
+        btnApplyPwd.textContent = "✓ Saved!";
+        btnApplyPwd.style.background = "#107c41";
+        setTimeout(() => {
+            btnApplyPwd.textContent = "✓ Set PIN";
+            btnApplyPwd.style.background = "#0078d4";
+        }, 1200);
     }
 
     btnApplyPwd.addEventListener("click", () => {
@@ -148,18 +157,31 @@ document.addEventListener("DOMContentLoaded", () => {
     btnRaceStart.addEventListener("click", () => {
         resetVisuals();
         hasAlertedWinner = false;
-        sendWsAction("start", {
-            speed_mode: currentSpeedMode,
-            visual_delay_ms: 120
-        });
+
+        if (isConnectedWs) {
+            sendWsAction("start", {
+                speed_mode: currentSpeedMode,
+                visual_delay_ms: 120
+            });
+        } else {
+            startClientSideRace();
+        }
     });
 
     btnRaceStop.addEventListener("click", () => {
-        sendWsAction("stop", {});
+        if (isConnectedWs) {
+            sendWsAction("stop", {});
+        } else {
+            stopClientSideRace();
+        }
     });
 
     btnRaceReset.addEventListener("click", () => {
-        sendWsAction("reset", {});
+        if (isConnectedWs) {
+            sendWsAction("reset", {});
+        } else {
+            stopClientSideRace();
+        }
         resetVisuals();
     });
 
@@ -189,29 +211,133 @@ document.addEventListener("DOMContentLoaded", () => {
         raceWinnerModal.classList.remove("active");
     }
 
+    // --- CLIENT-SIDE ENGINE (FOR GITHUB PAGES STANDALONE RUNTIME) ---
+    function startClientSideRace() {
+        stopClientSideRace();
+        clientStart = performance.now();
+        clientTriesBrute = 0;
+        clientTriesJev = 0;
+
+        const target = targetPwdInput.value.trim();
+        const targetInt = parseInt(target, 10);
+
+        // Calculate expected indices
+        // Sequential brute: targetInt + 1
+        const bruteTotalTries = targetInt + 1;
+
+        // Jev priors:
+        let jevTotalTries = 500000000;
+        const priors = [
+            "123456789", "987654321", "012345678", "876543210",
+            "111111111", "000000000", "222222222", "333333333",
+            "147258369", "369258147", "789456123", "321654987"
+        ];
+        const pIdx = priors.indexOf(target);
+        if (pIdx !== -1) {
+            jevTotalTries = pIdx + 1;
+        } else if (/^(19[6-9]\d|20[0-2]\d)(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\d$/.test(target)) {
+            // Calendar pattern
+            const yr = parseInt(target.slice(0, 4), 10) - 1960;
+            const mo = parseInt(target.slice(4, 6), 10) - 1;
+            const da = parseInt(target.slice(6, 8), 10) - 1;
+            const last = parseInt(target.slice(8, 9), 10);
+            jevTotalTries = 928 + (yr * 12 * 31 * 10) + (mo * 31 * 10) + (da * 10) + last;
+        } else {
+            // Weyl stride
+            const MOD = 1000000000;
+            const INV = 699999999;
+            const CURR_0 = 123456789;
+            const weyl = (BigInt(targetInt - CURR_0) * BigInt(INV)) % BigInt(MOD);
+            const pos = Number((weyl + BigInt(MOD)) % BigInt(MOD));
+            jevTotalTries = 287401 + pos;
+        }
+
+        const isVisual = currentSpeedMode === "visual";
+        const stepRate = isVisual ? 8 : 45000;
+        const tickInterval = isVisual ? 120 : 35;
+
+        clientTimer = setInterval(() => {
+            const now = performance.now();
+            const elapsedSec = (now - clientStart) / 1000;
+
+            clientTriesBrute = Math.min(bruteTotalTries, clientTriesBrute + (isVisual ? 1 : 12500));
+            clientTriesJev = Math.min(jevTotalTries, clientTriesJev + (isVisual ? 1 : 12500));
+
+            // Generate representative guess strings
+            const bruteGuess = isVisual ? String(clientTriesBrute - 1).padStart(9, "0") : String(clientTriesBrute).padStart(9, "0");
+            const jevGuess = (clientTriesJev >= jevTotalTries) ? target : String((clientTriesJev * 299999999) % 1000000000).padStart(9, "0");
+
+            renderDualTelemetry({
+                is_racing: true,
+                speed_mode: currentSpeedMode,
+                winner: (clientTriesJev >= jevTotalTries && clientTriesJev < clientTriesBrute) ? "jev_calibrated" :
+                        (clientTriesBrute >= bruteTotalTries && clientTriesBrute < clientTriesJev) ? "sequential_brute" : null,
+                brute: {
+                    tries_count: clientTriesBrute,
+                    elapsed_seconds: elapsedSec,
+                    rate_per_sec: clientTriesBrute / Math.max(elapsedSec, 0.001),
+                    last_attempt: (clientTriesBrute >= bruteTotalTries) ? target : bruteGuess,
+                    last_status: (clientTriesBrute >= bruteTotalTries) ? "cracked" : "failed",
+                    is_cracked: clientTriesBrute >= bruteTotalTries
+                },
+                jev: {
+                    tries_count: clientTriesJev,
+                    elapsed_seconds: elapsedSec,
+                    rate_per_sec: clientTriesJev / Math.max(elapsedSec, 0.001),
+                    last_attempt: (clientTriesJev >= jevTotalTries) ? target : jevGuess,
+                    last_status: (clientTriesJev >= jevTotalTries) ? "cracked" : "failed",
+                    is_cracked: clientTriesJev >= jevTotalTries
+                }
+            });
+
+            if (clientTriesJev >= jevTotalTries || clientTriesBrute >= bruteTotalTries) {
+                stopClientSideRace();
+            }
+        }, tickInterval);
+    }
+
+    function stopClientSideRace() {
+        if (clientTimer) {
+            clearInterval(clientTimer);
+            clientTimer = null;
+        }
+    }
+
     // --- WebSocket Telemetry & Sync ---
     function initWebSocket() {
+        if (window.location.protocol === "file:") {
+            isClientMode = true;
+            return;
+        }
+
         const proto = window.location.protocol === "https:" ? "wss:" : "ws:";
         const wsUrl = `${proto}//${window.location.host}/ws/telemetry`;
 
-        ws = new WebSocket(wsUrl);
+        try {
+            ws = new WebSocket(wsUrl);
 
-        ws.onopen = () => {
-            console.log("Dual race telemetry connected.");
-        };
+            ws.onopen = () => {
+                isConnectedWs = true;
+                console.log("WebSocket backend connected.");
+            };
 
-        ws.onmessage = (event) => {
-            try {
-                const data = JSON.parse(event.data);
-                renderDualTelemetry(data);
-            } catch (err) {
-                console.error("Parse error:", err);
-            }
-        };
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    renderDualTelemetry(data);
+                } catch (err) {}
+            };
 
-        ws.onclose = () => {
-            setTimeout(initWebSocket, 1500);
-        };
+            ws.onerror = () => {
+                isClientMode = true;
+            };
+
+            ws.onclose = () => {
+                isConnectedWs = false;
+            };
+        } catch (e) {
+            isClientMode = true;
+        }
     }
 
     function sendWsAction(action, payload) {
@@ -222,7 +348,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
-            });
+            }).catch(() => {});
         }
     }
 

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1,000-Run Benchmark Report - Brute Force vs Jev Model</title>
+    <link rel="stylesheet" href="./static/style.css">
+    <style>
+        body {
+            overflow-y: auto !important;
+            background-color: #0b0f17;
+            color: #e6edf3;
+            user-select: text;
+        }
+
+        .report-page-container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 30px 20px 80px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .report-nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(22, 28, 40, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(16px);
+            padding: 12px 24px;
+            border-radius: 10px;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .report-nav-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #60cdff;
+            text-decoration: none;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #0078d4;
+            color: #fff;
+            border-color: #0078d4;
+        }
+
+        .report-card {
+            background: rgba(18, 24, 35, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 12px;
+            padding: 36px;
+            margin-bottom: 28px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+        }
+
+        .report-card h1 {
+            font-size: 1.85rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #fff;
+        }
+
+        .report-card h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin: 28px 0 14px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #60cdff;
+        }
+
+        .report-card h3 {
+            font-size: 1.1rem;
+            margin: 20px 0 10px 0;
+            color: #cad6e2;
+        }
+
+        .report-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin: 16px 0 24px 0;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #9aa7b5;
+        }
+
+        .report-meta span b {
+            color: #fff;
+        }
+
+        /* Stat callout grids */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 18px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .stat-card.brute {
+            border-top: 3px solid #d13438;
+        }
+
+        .stat-card.jev {
+            border-top: 3px solid #8764b8;
+        }
+
+        .stat-card-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #888;
+            margin-bottom: 6px;
+        }
+
+        .stat-card-val {
+            font-size: 2rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-card.brute .stat-card-val { color: #ff99a4; }
+        .stat-card.jev .stat-card-val { color: #d1b4ff; }
+
+        .stat-card-sub {
+            font-size: 0.82rem;
+            color: #bbb;
+            margin-top: 4px;
+        }
+
+        /* Responsive tables */
+        .table-wrap {
+            overflow-x: auto;
+            margin: 18px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        table.styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            text-align: left;
+        }
+
+        table.styled-table th, table.styled-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        table.styled-table th {
+            background: rgba(255, 255, 255, 0.07);
+            color: #9aa7b5;
+            font-weight: 600;
+        }
+
+        table.styled-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .highlight-green { color: #74f59c; font-weight: 600; }
+        .highlight-yellow { color: #ffcc00; font-weight: 600; }
+        .highlight-blue { color: #60cdff; font-weight: 600; }
+
+        /* Callout alert box */
+        .callout-box {
+            background: rgba(16, 124, 65, 0.15);
+            border-left: 4px solid #107c41;
+            padding: 14px 18px;
+            border-radius: 6px;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #d1f7dc;
+        }
+
+        .callout-box b { color: #74f59c; }
+    </style>
+</head>
+<body>
+
+    <!-- Desktop Background -->
+    <div id="desktop-bg" class="desktop-bg">
+        <div class="bloom-glow"></div>
+    </div>
+
+    <div class="report-page-container">
+        <!-- Top Navigation -->
+        <div class="report-nav-bar">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div class="brand-logo" style="width:28px; height:28px;">
+                    <svg viewBox="0 0 24 24" style="width:16px; height:16px; fill:#fff;">
+                        <path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/>
+                    </svg>
+                </div>
+                <span style="font-weight:600; font-size:0.95rem;">Windows Login Simulation</span>
+            </div>
+            <div class="report-nav-links">
+                <a href="./index.html" class="nav-btn">🖥️ Live Dual Simulator</a>
+                <a href="./admin.html" class="nav-btn">🛡️ Password Setup</a>
+                <a href="https://github.com/lauyeehow1986-hub/win_sim" target="_blank" class="nav-btn">GitHub Repo ↗</a>
+            </div>
+        </div>
+
+        <!-- Main Report Card -->
+        <article class="report-card">
+            <h1>Headless Benchmark Report: Sequential Brute Force vs. Jev Model</h1>
+            <p style="color:#888; font-size:1.05rem;">1,000-Run Head-to-Head Evaluation on 9-Digit Numeric Passwords</p>
+
+            <div class="report-meta">
+                <span>Date: <b>October 19, 2026</b></span>
+                <span>Target: <b>9 Characters (Numbers 0-9)</b></span>
+                <span>Search Space: <b>1,000,000,000 (10⁹)</b></span>
+                <span>Hive Systems Baseline: <b>2.0 Hours</b></span>
+                <span>Sample Size: <b>1,000 Runs</b></span>
+            </div>
+
+            <!-- Head-to-Head Scoreboard -->
+            <h2>🏆 Head-to-Head Win/Loss Record</h2>
+            <div class="grid-2">
+                <div class="stat-card brute">
+                    <div class="stat-card-title">Sequential Brute Force</div>
+                    <div class="stat-card-val">512 Wins</div>
+                    <div class="stat-card-sub">51.20% Win Rate | 501.9M Mean Attempts</div>
+                </div>
+                <div class="stat-card jev">
+                    <div class="stat-card-title">Jev Calibrated Model (System 1)</div>
+                    <div class="stat-card-val">488 Wins</div>
+                    <div class="stat-card-sub">48.80% Win Rate | 504.0M Mean Attempts</div>
+                </div>
+            </div>
+
+            <!-- Statistical Breakdown Table -->
+            <h2>📊 Statistical Summary</h2>
+            <p style="color:#aaa; font-size:0.85rem; margin-bottom:10px;">
+                Times are calculated at the Hive Systems multi-GPU cracking rate ($10^9 \text{ combinations} / 7,200 \text{ s} \approx 138,888.89 \text{ tries/sec}$).
+            </p>
+
+            <div class="table-wrap">
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Sequential Brute Force</th>
+                            <th>Jev Calibrated Model</th>
+                            <th>Comparison / Delta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Mean Attempts</td>
+                            <td>501,997,952</td>
+                            <td>504,046,240</td>
+                            <td class="highlight-blue">+0.41%</td>
+                        </tr>
+                        <tr>
+                            <td>Mean Equivalent Time</td>
+                            <td><b>3,614.39 s (60.2 min)</b></td>
+                            <td><b>3,629.13 s (60.5 min)</b></td>
+                            <td>+14.7 s</td>
+                        </tr>
+                        <tr>
+                            <td>Median Attempts (p50)</td>
+                            <td>498,806,646</td>
+                            <td>516,640,048</td>
+                            <td>+3.58%</td>
+                        </tr>
+                        <tr>
+                            <td>Median Equivalent Time</td>
+                            <td><b>3,591.41 s (59.9 min)</b></td>
+                            <td><b>3,719.81 s (62.0 min)</b></td>
+                            <td>+128.4 s</td>
+                        </tr>
+                        <tr>
+                            <td>Fastest Crack (Min)</td>
+                            <td>435,875 (3.14 s)</td>
+                            <td>1,158,825 (8.34 s)</td>
+                            <td>Brute Force +5.2 s</td>
+                        </tr>
+                        <tr>
+                            <td>Slowest Crack (Max)</td>
+                            <td>999,455,947 (7,196.1 s)</td>
+                            <td>999,489,028 (7,196.3 s)</td>
+                            <td>≈ Equal (Full keyspace)</td>
+                        </tr>
+                        <tr>
+                            <td>Standard Deviation</td>
+                            <td>291,625,967</td>
+                            <td>292,250,107</td>
+                            <td>Consistent spread</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Percentiles Table -->
+            <h3>Percentile Breakdown (Attempts & Equivalent Hive Time)</h3>
+            <div class="table-wrap">
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Percentile</th>
+                            <th>Sequential Brute Force</th>
+                            <th>Jev Calibrated Model</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>10th Percentile (p10)</td>
+                            <td>100,140,142 attempts (~12.0 min)</td>
+                            <td>98,721,075 attempts (~11.9 min)</td>
+                        </tr>
+                        <tr>
+                            <td>25th Percentile (p25)</td>
+                            <td>249,957,311 attempts (~30.0 min)</td>
+                            <td>254,424,547 attempts (~30.5 min)</td>
+                        </tr>
+                        <tr>
+                            <td>50th Percentile (Median)</td>
+                            <td>498,806,646 attempts (~59.9 min)</td>
+                            <td>516,640,048 attempts (~62.0 min)</td>
+                        </tr>
+                        <tr>
+                            <td>75th Percentile (p75)</td>
+                            <td>755,420,241 attempts (~90.7 min)</td>
+                            <td>756,108,654 attempts (~90.7 min)</td>
+                        </tr>
+                        <tr>
+                            <td>90th Percentile (p90)</td>
+                            <td>914,122,101 attempts (~109.7 min)</td>
+                            <td>919,508,932 attempts (~110.3 min)</td>
+                        </tr>
+                        <tr>
+                            <td>99th Percentile (p99)</td>
+                            <td>993,631,209 attempts (~119.2 min)</td>
+                            <td>995,894,603 attempts (~119.5 min)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mathematical Insight -->
+            <h2>🔬 Mathematical Insight: Uniform Random vs. Human Distributions</h2>
+            <p style="line-height:1.6; margin-bottom:14px; font-size:0.92rem;">
+                When passwords are drawn from a <b>pure, uniform cryptographic random distribution</b> across $000000000$ to $999999999$:
+            </p>
+            <ul style="line-height:1.6; margin-left:24px; font-size:0.9rem; color:#bbb; margin-bottom:18px;">
+                <li>Every candidate has equal probability ($P = 10^{-9}$).</li>
+                <li>According to the <b>No Free Lunch Theorem for Search and Optimization (Wolpert & Macready)</b>, no heuristic or permutation ordering can outperform standard sequential search in mathematical expectation over uniform entropy.</li>
+                <li>Both algorithms average almost exactly <b>500 million attempts (~60 minutes)</b>, resulting in a near 50/50 statistical split (<b>48.8% vs. 51.2%</b>).</li>
+            </ul>
+
+            <!-- Human Pattern Cohort -->
+            <h2>⚡ Where Jev Dominates: The Human Pattern Cohort</h2>
+            <p style="line-height:1.6; margin-bottom:14px; font-size:0.92rem;">
+                In the real world—the exact focus of Hive Systems' password security awareness research—human beings do not generate uniform random numbers. People pick birthdays, calendar dates, repetitions, sequences, and numpad patterns.
+            </p>
+
+            <div class="callout-box">
+                <b>Key Finding:</b> On human-structured passwords, Jev's System 1 calibrated priors solve the target in <b>seconds</b>, while Sequential Brute Force requires up to <b>almost 2 hours</b>.
+            </div>
+
+            <div class="table-wrap">
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Target PIN</th>
+                            <th>Pattern Type</th>
+                            <th>Brute Force Tries (Time)</th>
+                            <th>Jev Model Tries (Time)</th>
+                            <th>Jev Speedup Factor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>123456789</code></td>
+                            <td>Sequential Run</td>
+                            <td>123,456,790 (14.8 min)</td>
+                            <td class="highlight-green">1 (0.000007 s)</td>
+                            <td class="highlight-green"><b>123,456,790x</b></td>
+                        </tr>
+                        <tr>
+                            <td><code>987654321</code></td>
+                            <td>Reverse Sequence</td>
+                            <td>987,654,322 (118.5 min)</td>
+                            <td class="highlight-green">2 (0.000014 s)</td>
+                            <td class="highlight-green"><b>493,827,161x</b></td>
+                        </tr>
+                        <tr>
+                            <td><code>111111111</code></td>
+                            <td>Repeated Digit</td>
+                            <td>111,111,112 (13.3 min)</td>
+                            <td class="highlight-green">5 (0.000036 s)</td>
+                            <td class="highlight-green"><b>22,222,222x</b></td>
+                        </tr>
+                        <tr>
+                            <td><code>147258369</code></td>
+                            <td>Numpad Column Walk</td>
+                            <td>147,258,370 (17.7 min)</td>
+                            <td class="highlight-green">21 (0.00015 s)</td>
+                            <td class="highlight-green"><b>7,012,303x</b></td>
+                        </tr>
+                        <tr>
+                            <td><code>369258147</code></td>
+                            <td>Numpad Reverse</td>
+                            <td>369,258,148 (44.3 min)</td>
+                            <td class="highlight-green">22 (0.00016 s)</td>
+                            <td class="highlight-green"><b>16,784,461x</b></td>
+                        </tr>
+                        <tr>
+                            <td><code>199805121</code></td>
+                            <td>Birthday Date (<code>YYYYMMDD</code>)</td>
+                            <td>199,805,122 (24.0 min)</td>
+                            <td class="highlight-green">157,902 (1.14 s)</td>
+                            <td class="highlight-green"><b>1,265x</b></td>
+                        </tr>
+                        <tr>
+                            <td><code>200112253</code></td>
+                            <td>Christmas Date (<code>YYYYMMDD</code>)</td>
+                            <td>200,112,254 (24.0 min)</td>
+                            <td class="highlight-green">172,710 (1.24 s)</td>
+                            <td class="highlight-green"><b>1,159x</b></td>
+                        </tr>
+                        <tr>
+                            <td><code>091234567</code></td>
+                            <td>Phone Prefix</td>
+                            <td>91,234,568 (10.9 min)</td>
+                            <td class="highlight-green">287,402 (2.07 s)</td>
+                            <td class="highlight-green"><b>317x</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Conclusion -->
+            <h2>🏁 Summary & Conclusions</h2>
+            <p style="line-height:1.6; margin-bottom:12px; font-size:0.92rem;">
+                <b>1. Pure Random Security:</b> A truly random 9-digit PIN provides strong theoretical defense against both sequential brute force and AI-guided priors, forcing an attacker to evaluate ~500 million keys on average (~60 minutes on high-end hardware).
+            </p>
+            <p style="line-height:1.6; margin-bottom:12px; font-size:0.92rem;">
+                <b>2. Human Bias Vulnerability:</b> Passwords based on dates, repeated keys, or numpad shapes reduce the effective search space from 1 billion combinations down to thousands or hundreds, enabling calibrated System 1 models to crack them in under 2 seconds.
+            </p>
+            <p style="line-height:1.6; font-size:0.92rem;">
+                <b>3. Benchmark Source:</b> Referenced against <a href="https://www.hivesystems.com/blog/are-your-passwords-in-the-green" target="_blank" style="color:#60cdff; text-decoration:underline;">Hive Systems: "Are Your Passwords in the Green?"</a>. Complete raw JSON trial records are stored in <code>headless_results.json</code>.
+            </p>
+        </article>
+    </div>
+
+</body>
+</html>
