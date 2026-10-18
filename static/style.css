@@ -1,8 +1,8 @@
-/* Windows 11 Fluent Design & Side-by-Side Dual Race Styling */
+/* Windows 11 Fluent Design & Dual Race Styling - Desktop & Mobile Responsive */
 :root {
     --win-accent: #0067c0;
     --win-accent-hover: #1877d5;
-    --win-acrylic-bg: rgba(25, 30, 40, 0.78);
+    --win-acrylic-bg: rgba(22, 28, 38, 0.85);
     --win-card-border: rgba(255, 255, 255, 0.14);
     --win-text: #ffffff;
     --win-text-sec: #cccccc;
@@ -25,8 +25,7 @@
 
 body, html {
     width: 100%;
-    height: 100%;
-    overflow: hidden;
+    min-height: 100%;
     background-color: #050a12;
     color: var(--win-text);
 }
@@ -60,24 +59,26 @@ body, html {
 .app-container {
     position: relative;
     z-index: 5;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
 /* Top Universal Controller Bar */
 .top-bar {
-    height: 68px;
-    background: rgba(18, 24, 34, 0.88);
+    min-height: 68px;
+    background: rgba(18, 24, 34, 0.92);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--win-card-border);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 24px;
+    padding: 10px 24px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     z-index: 20;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 .brand-section {
@@ -89,23 +90,30 @@ body, html {
 .brand-logo {
     width: 32px;
     height: 32px;
+    max-width: 32px;
+    max-height: 32px;
     background: linear-gradient(135deg, #0078d4, #60cdff);
     border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 8px rgba(0, 120, 212, 0.4);
+    flex-shrink: 0;
 }
 
 .brand-logo svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
+    max-width: 18px;
+    max-height: 18px;
     fill: #fff;
+    display: block;
 }
 
 .brand-text h1 {
     font-size: 1.05rem;
     font-weight: 600;
+    line-height: 1.2;
 }
 
 .brand-text p {
@@ -117,11 +125,12 @@ body, html {
 .password-setup-group {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     background: rgba(255, 255, 255, 0.05);
-    padding: 6px 14px;
+    padding: 6px 12px;
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    flex-wrap: wrap;
 }
 
 .setup-label {
@@ -137,7 +146,7 @@ body, html {
 }
 
 .custom-pwd-input {
-    width: 130px;
+    width: 120px;
     height: 32px;
     background: rgba(10, 14, 20, 0.9);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -159,7 +168,7 @@ body, html {
 
 .char-badge {
     position: absolute;
-    right: -32px;
+    right: -30px;
     font-size: 0.72rem;
     color: #8ae8ff;
     font-weight: 600;
@@ -169,11 +178,12 @@ body, html {
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.15);
     color: #e0e0e0;
-    padding: 4px 10px;
+    padding: 4px 8px;
     border-radius: 4px;
     font-size: 0.76rem;
     cursor: pointer;
     transition: background 0.15s;
+    white-space: nowrap;
 }
 
 .preset-chip:hover {
@@ -191,6 +201,7 @@ body, html {
     font-weight: 600;
     cursor: pointer;
     transition: background 0.15s;
+    white-space: nowrap;
 }
 
 .btn-set-pwd:hover {
@@ -202,13 +213,14 @@ body, html {
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-wrap: wrap;
 }
 
 .btn-race-start {
     background: #107c41;
     color: #fff;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 7px 16px;
+    padding: 7px 14px;
     border-radius: 5px;
     font-size: 0.86rem;
     font-weight: 600;
@@ -217,6 +229,7 @@ body, html {
     display: flex;
     align-items: center;
     gap: 6px;
+    white-space: nowrap;
 }
 
 .btn-race-start:hover {
@@ -227,12 +240,13 @@ body, html {
     background: rgba(209, 52, 56, 0.85);
     color: #fff;
     border: none;
-    padding: 7px 14px;
+    padding: 7px 12px;
     border-radius: 5px;
     font-size: 0.86rem;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.15s;
+    white-space: nowrap;
 }
 
 .btn-race-stop:hover {
@@ -248,6 +262,7 @@ body, html {
     font-size: 0.86rem;
     cursor: pointer;
     transition: background 0.15s;
+    white-space: nowrap;
 }
 
 .btn-race-reset:hover {
@@ -268,6 +283,7 @@ body, html {
     padding: 5px 9px;
     font-size: 0.76rem;
     cursor: pointer;
+    white-space: nowrap;
 }
 
 .speed-btn.active {
@@ -280,12 +296,14 @@ body, html {
 .hive-sub-bar {
     background: rgba(16, 124, 65, 0.15);
     border-bottom: 1px solid rgba(16, 124, 65, 0.35);
-    padding: 6px 24px;
+    padding: 8px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     color: #d2f8df;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
 .hive-sub-bar b {
@@ -297,13 +315,12 @@ body, html {
     flex: 1;
     display: flex;
     padding: 20px 24px 30px 24px;
-    gap: 24px;
-    overflow: hidden;
+    gap: 20px;
 }
 
 .monitor-frame {
     flex: 1;
-    background: rgba(22, 28, 38, 0.75);
+    background: rgba(22, 28, 38, 0.82);
     backdrop-filter: blur(28px);
     border: 2px solid var(--win-card-border);
     border-radius: 12px;
@@ -313,6 +330,7 @@ body, html {
     position: relative;
     overflow: hidden;
     transition: border 0.3s ease, box-shadow 0.3s ease;
+    min-height: 480px;
 }
 
 .monitor-frame.winner {
@@ -389,6 +407,8 @@ body, html {
 .win-avatar-circle {
     width: 90px;
     height: 90px;
+    max-width: 90px;
+    max-height: 90px;
     border-radius: 50%;
     margin-bottom: 16px;
     display: flex;
@@ -396,6 +416,7 @@ body, html {
     justify-content: center;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
     border: 2px solid rgba(255, 255, 255, 0.15);
+    flex-shrink: 0;
 }
 
 .win-avatar-circle.brute {
@@ -407,9 +428,12 @@ body, html {
 }
 
 .win-avatar-circle svg {
-    width: 52px;
-    height: 52px;
+    width: 48px;
+    height: 48px;
+    max-width: 48px;
+    max-height: 48px;
     fill: #e0e0e0;
+    display: block;
 }
 
 .win-profile-name {
@@ -429,12 +453,12 @@ body, html {
 
 .win-input-mock {
     width: 100%;
-    height: 36px;
-    background: rgba(15, 20, 28, 0.8);
+    height: 38px;
+    background: rgba(15, 20, 28, 0.85);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 4px;
     color: #fff;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     letter-spacing: 2px;
     padding: 0 42px 0 12px;
     outline: none;
@@ -444,8 +468,8 @@ body, html {
 .win-arrow-btn {
     position: absolute;
     right: 4px;
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     background: rgba(255, 255, 255, 0.1);
     border: none;
     border-radius: 4px;
@@ -453,6 +477,14 @@ body, html {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.win-arrow-btn svg {
+    width: 16px;
+    height: 16px;
+    max-width: 16px;
+    max-height: 16px;
+    display: block;
 }
 
 /* Windows Fail Dialog Mockup inside Monitor */
@@ -487,7 +519,7 @@ body, html {
     background: var(--win-accent);
     color: #fff;
     border: none;
-    padding: 4px 18px;
+    padding: 5px 18px;
     border-radius: 4px;
     font-size: 0.82rem;
     font-weight: 500;
@@ -496,7 +528,7 @@ body, html {
 /* Winner Celebration Card inside Monitor */
 .screen-winner-card {
     position: absolute;
-    width: 320px;
+    width: 300px;
     background: rgba(16, 124, 65, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 10px;
@@ -525,9 +557,17 @@ body, html {
     margin-bottom: 8px;
 }
 
+.winner-icon svg {
+    width: 24px;
+    height: 24px;
+    max-width: 24px;
+    max-height: 24px;
+    display: block;
+}
+
 /* Live Telemetry Panel on each Monitor Bottom */
 .monitor-telemetry {
-    background: rgba(12, 16, 24, 0.75);
+    background: rgba(12, 16, 24, 0.85);
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     padding: 12px 18px;
     display: grid;
@@ -574,18 +614,19 @@ body, html {
 }
 
 .race-winner-card {
-    width: 520px;
+    width: 90%;
+    max-width: 520px;
     background: rgba(24, 30, 42, 0.95);
     border: 1px solid rgba(16, 124, 65, 0.6);
     border-radius: 12px;
-    padding: 30px;
+    padding: 26px;
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(16, 124, 65, 0.4);
     text-align: center;
     animation: win-pop 0.25s ease-out;
 }
 
 .race-winner-title {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 4px;
 }
@@ -599,7 +640,7 @@ body, html {
 .comparison-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
     font-size: 0.88rem;
     background: rgba(0, 0, 0, 0.25);
     border-radius: 6px;
@@ -607,7 +648,7 @@ body, html {
 }
 
 .comparison-table th, .comparison-table td {
-    padding: 10px 14px;
+    padding: 10px 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -635,4 +676,62 @@ body, html {
 @keyframes win-pop {
     0% { transform: scale(0.92); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
+}
+
+/* ==========================================================================
+   MOBILE & TABLET RESPONSIVE RULES (FIXES PHONE SQUISHING & OVERFLOWS)
+   ========================================================================== */
+@media (max-width: 900px) {
+    body, html {
+        overflow-y: auto !important;
+        height: auto !important;
+    }
+
+    .app-container {
+        height: auto !important;
+        min-height: 100vh;
+    }
+
+    .top-bar {
+        padding: 12px 16px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .brand-section {
+        justify-content: center;
+    }
+
+    .password-setup-group {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .race-controls {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .hive-sub-bar {
+        padding: 8px 16px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .dual-viewport {
+        flex-direction: column;
+        padding: 12px 14px 40px 14px;
+        gap: 18px;
+    }
+
+    .monitor-frame {
+        width: 100%;
+        min-height: 420px;
+    }
+
+    .monitor-screen {
+        padding: 24px 12px;
+    }
 }
